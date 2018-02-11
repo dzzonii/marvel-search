@@ -1,13 +1,32 @@
 $(function (){
 
+	var characters;
+	var localCharacters;
+
 	var localChars = function(){
-		var localCharacters = localStorage.getItem('characters');
-		localCharacters = JSON.parse(localCharacters);
-		$.each(localCharacters, function(index){
-	    	$('#root .characters-local').append('<li><img src="' + localCharacters[index].thumbnail.path + '/standard_xlarge.' + localCharacters[index].thumbnail.extension + '"><h5>' + localCharacters[index].name + '</h5></li>');
-    	});
-		console.log(localCharacters);
-	}
+		$('#root .characters-local').empty();
+		for (var i = 0; i < localStorage.length; i++) {
+		    var key = localStorage.key(i); // get key by index
+
+		    if (key.indexOf("character") >= 0) { // if starts with _#
+		        var elem = localStorage.getItem(key); // get value by key
+				parseElem = JSON.parse(elem);
+		        // console.log(parseElem); // print it out / do something else
+		        $('#root .characters-local').append('<li data-key="'+ key +'"><img src="' + parseElem.thumbnail.path + '/standard_xlarge.' + parseElem.thumbnail.extension + '"><h5>' + parseElem.name + '</h5><button class="remove">X</button></li>');
+		    }
+		}
+	};
+	localChars();
+
+	var removeLocal = function(){
+		$('#root .characters-local .remove').click(function(){
+			var keyRemoval = $(this).closest('li').attr('data-key');
+			// console.log(keyRemoval);
+			localStorage.removeItem(keyRemoval);
+    		location.reload();
+		});
+	};
+	removeLocal();
 
 	$('#search').keyup(function(){
 		var searchField = $('#search').val();
@@ -15,6 +34,7 @@ $(function (){
 		// Checks if search field is empty, so it renders items from localstorage and stops ajax request.
 		if(!searchField){
 			localChars();
+			removeLocal();
 			$('#root .search-result').empty();
 			return;
 		}
@@ -26,29 +46,49 @@ $(function (){
 			url: url,
 			dataType: "json",
 			beforeSend: function() {
-				$('#root span').show();
+				$('#root .loading').show();
 			},
 			success: function (data) {
-				$('#root span').hide();
-		  		var characters = data.data.results;
+				$('#root .loading').hide();
+		  		characters = data.data.results;
 
 		  		$('#root .search-result').empty();
 			    $.each(data.data.results, function(index){
-			    	$('#root .search-result').append('<li><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"><h5>' + data.data.results[index].name + '</h5></li>');
+			    	$('#root .search-result').append('<li data-index="'+ index +'"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"><h5>' + data.data.results[index].name + '</h5><button class="mark">bookmark</button></li>');
 		    	});
 
-			    localStorage.setItem('characters', JSON.stringify(characters));
+			    // localStorage.setItem('characters', JSON.stringify(characters));
 
 				$('#root .characters-local').empty();
 
 			}
 		});
+
 	});
 
-	// $(document).ajaxStop(function() {
-		// console.log(characters);
-	// });
 
-	localChars();
+			var bookmarkedChar = '';
+			var parsedObject = [];
+
+	$(document).ajaxStop(function() {
+		$('#root .search-result li .mark').click(function(){
+			var charItem = $(this).closest('li');
+			charItem.toggleClass('marked');
+
+
+			var charIndex = charItem.attr('data-index');
+			bookmarkedChar = JSON.stringify(characters[charIndex]);
+
+			localStorage.setItem('character' + characters[charIndex].id, bookmarkedChar);
+
+
+
+			var retrievedObject = localStorage.getItem('character' + characters[charIndex].id);
+			parsedObject = JSON.parse(retrievedObject);
+			
+		});
+
+		// console.log(localCharacters);
+	});
 
 });

@@ -39,6 +39,22 @@ body {
     text-align: center;
 }
 
+#root ul li.marked button {
+	position: relative;
+}
+
+#root ul li.marked button:after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 50%;
+	margin-top: -5px;
+	right: -15px;
+	width: 10px;
+	height: 10px;
+	background: green;
+}
+
 #root ul li img {
 	vertical-align: top;
 }
