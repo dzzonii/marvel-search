@@ -12,7 +12,7 @@ $(function (){
 		        var elem = localStorage.getItem(key); // get value by key
 				parseElem = JSON.parse(elem);
 		        // console.log(parseElem); // print it out / do something else
-		        $('#root .characters-local').append('<li data-key="'+ key +'"><img src="' + parseElem.thumbnail.path + '/standard_xlarge.' + parseElem.thumbnail.extension + '"><h5>' + parseElem.name + '</h5><button class="remove">X</button></li>');
+		        $('#root .characters-local').append('<li data-key="'+ key +'"><div class="img-container"><img src="' + parseElem.thumbnail.path + '/standard_xlarge.' + parseElem.thumbnail.extension + '"></div><h5>' + parseElem.name + '</h5><button class="remove">X</button></li>');
 		    }
 		}
 	};
@@ -33,7 +33,6 @@ $(function (){
 
 		// Checks if search field is empty, so it renders items from localstorage and stops ajax request.
 		if(!searchField){
-			localChars();
     		location.reload();
 			return;
 		}
@@ -55,16 +54,16 @@ $(function (){
 		  		$('#root .search-result').empty();
 			    $.each(data.data.results, function(index){
 			    	// Check if item is already bookmarked
-			    	var alreadyMarked = '<span></span>';
+			    	var alreadyMarked = '';
 			    	for (var i = 0; i < localStorage.length; i++) {
 					    var key = localStorage.key(i);
 						var stringID = JSON.stringify(data.data.results[index].id);
 					    if (key.indexOf(stringID) >= 0) { 
-					        var alreadyMarked = '<span>Marked</span>';
+					        var alreadyMarked = 'class="marked"';
 					    }
 					}
 
-			    	$('#root .search-result').append('<li data-index="'+ index +'"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"><h5>' + data.data.results[index].name + '</h5><button class="mark">bookmark</button>'+ 	alreadyMarked +'</li>');
+			    	$('#root .search-result').append('<li data-index="'+ index +'" '+ alreadyMarked +'><div class="img-container"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"></div><h5>' + data.data.results[index].name + '</h5><button class="mark">+</button><span>Marked</span></li>');
 		    	});
 
 
@@ -80,6 +79,7 @@ $(function (){
 	$(document).ajaxStop(function() {
 		$('#root .search-result li .mark').click(function(){
 			var charItem = $(this).closest('li');
+			charItem.addClass('marked');
 
 			var charIndex = charItem.attr('data-index');
 			bookmarkedChar = JSON.stringify(characters[charIndex]);
@@ -91,7 +91,7 @@ $(function (){
 			var retrievedObject = localStorage.getItem('character' + characters[charIndex].id);
 			parsedObject = JSON.parse(retrievedObject);
 
-			charItem.find('span').text('MARK!!');
+			charItem.find('span').show();
 			
 		});
 

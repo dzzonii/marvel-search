@@ -1,6 +1,7 @@
 body {
 	padding: 0;
 	margin: 0;
+	font-family: Arial;
 }
 
 #root .search-box {
@@ -34,19 +35,29 @@ body {
 #root ul li {
 	padding: 0;
 	display: inline-block;
+	position: relative;
     text-align: center;
-    margin-bottom: 10px
 }
-@media screen and (min-width: 768px) {
-	#root ul {
-		max-width: 1024px;
-	}
-	#root ul li {
-		float: left;
-		width: 20%;
-	}
+#root ul li .img-container {
+	min-height: 200px;
 }
-@media screen and (min-width: 768px) {
+#root ul li h5 {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 10px);
+    background: rgba(0,0,0,0.8);
+    margin: 5px;
+    padding: 10px 0;
+    color: #fff;
+}
+#root ul li .remove,
+#root ul li .mark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+@media screen and (min-width: 1024px) {
 	#root ul {
 		max-width: 1000px;
 	}
@@ -55,21 +66,17 @@ body {
 		width: 20%;
 	}
 }
-
-#root ul li.marked button {
-	position: relative;
+#root ul li span {
+	display: none;
 }
-
-#root ul li.marked button:after {
-	content: '';
-	display: block;
-	position: absolute;
-	top: 50%;
-	margin-top: -5px;
-	right: -15px;
-	width: 10px;
-	height: 10px;
-	background: green;
+#root ul li.marked span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    background: green;
+    color: #fff;
+    padding: 5px;
 }
 
 #root ul li img {
