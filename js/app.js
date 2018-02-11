@@ -63,7 +63,7 @@ $(function (){
 					    }
 					}
 
-			    	$('.content .search-result').append('<li data-index="'+ index +'" '+ alreadyMarked +'><div class="img-container"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"></div><h5>' + data.data.results[index].name + '</h5><button class="mark">+</button><span>Marked</span></li>');
+			    	$('.content .search-result').append('<li data-index="'+ index +'" '+ alreadyMarked +'><div class="img-container"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"></div><h5>' + data.data.results[index].name + '</h5><button class="mark">+</button><span>Added</span></li>');
 		    	});
 
 
