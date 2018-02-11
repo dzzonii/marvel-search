@@ -4,7 +4,7 @@ $(function (){
 	var localCharacters;
 
 	var localChars = function(){
-		$('#root .characters-local').empty();
+		$('.content .characters-local').empty();
 		for (var i = 0; i < localStorage.length; i++) {
 		    var key = localStorage.key(i); // get key by index
 
@@ -12,14 +12,14 @@ $(function (){
 		        var elem = localStorage.getItem(key); // get value by key
 				parseElem = JSON.parse(elem);
 		        // console.log(parseElem); // print it out / do something else
-		        $('#root .characters-local').append('<li data-key="'+ key +'"><div class="img-container"><img src="' + parseElem.thumbnail.path + '/standard_xlarge.' + parseElem.thumbnail.extension + '"></div><h5>' + parseElem.name + '</h5><button class="remove">X</button></li>');
+		        $('.content .characters-local').append('<li data-key="'+ key +'"><div class="img-container"><img src="' + parseElem.thumbnail.path + '/standard_xlarge.' + parseElem.thumbnail.extension + '"></div><h5>' + parseElem.name + '</h5><button class="remove">X</button></li>');
 		    }
 		}
 	};
 	localChars();
 
 	var removeLocal = function(){
-		$('#root .characters-local .remove').click(function(){
+		$('.content .characters-local .remove').click(function(){
 			var keyRemoval = $(this).closest('li').attr('data-key');
 			// console.log(keyRemoval);
 			localStorage.removeItem(keyRemoval);
@@ -44,14 +44,14 @@ $(function (){
 			url: url,
 			dataType: "json",
 			beforeSend: function() {
-				$('#root .loading').show();
+				$('.content .loading').show();
 			},
 			success: function (data) {
-				$('#root .loading').hide();
-				$('#root .characters-local').empty();
+				$('.content .loading').hide();
+				$('.content .characters-local').empty();
 		  		characters = data.data.results;
 
-		  		$('#root .search-result').empty();
+		  		$('.content .search-result').empty();
 			    $.each(data.data.results, function(index){
 			    	// Check if item is already bookmarked
 			    	var alreadyMarked = '';
@@ -59,11 +59,11 @@ $(function (){
 					    var key = localStorage.key(i);
 						var stringID = JSON.stringify(data.data.results[index].id);
 					    if (key.indexOf(stringID) >= 0) { 
-					        var alreadyMarked = 'class="marked"';
+					        alreadyMarked = 'class="marked"';
 					    }
 					}
 
-			    	$('#root .search-result').append('<li data-index="'+ index +'" '+ alreadyMarked +'><div class="img-container"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"></div><h5>' + data.data.results[index].name + '</h5><button class="mark">+</button><span>Marked</span></li>');
+			    	$('.content .search-result').append('<li data-index="'+ index +'" '+ alreadyMarked +'><div class="img-container"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"></div><h5>' + data.data.results[index].name + '</h5><button class="mark">+</button><span>Marked</span></li>');
 		    	});
 
 
@@ -77,7 +77,7 @@ $(function (){
 			var parsedObject = [];
 
 	$(document).ajaxStop(function() {
-		$('#root .search-result li .mark').click(function(){
+		$('.content .search-result li .mark').click(function(){
 			var charItem = $(this).closest('li');
 			charItem.addClass('marked');
 
