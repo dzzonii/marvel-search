@@ -22,7 +22,7 @@ body {
 	margin: 0 auto;
 	padding: 0;
 	list-style-type: none;
-	max-width: 1024px;
+	max-width: 200px;
 }
 
 #root ul:after {
@@ -34,9 +34,26 @@ body {
 #root ul li {
 	padding: 0;
 	display: inline-block;
-    float: left;
-    width: 20%;
     text-align: center;
+    margin-bottom: 10px
+}
+@media screen and (min-width: 768px) {
+	#root ul {
+		max-width: 1024px;
+	}
+	#root ul li {
+		float: left;
+		width: 20%;
+	}
+}
+@media screen and (min-width: 768px) {
+	#root ul {
+		max-width: 1000px;
+	}
+	#root ul li {
+		float: left;
+		width: 20%;
+	}
 }
 
 #root ul li.marked button {
@@ -58,3 +75,20 @@ body {
 #root ul li img {
 	vertical-align: top;
 }
+
+// #root .characters-local li:hover {
+// 	position: relative;
+// }
+// #root .characters-local li:hover:after {
+// 	content: 'x';
+// 	display: block;
+// 	position: absolute;
+// 	width: 100%;
+// 	height: 100%;
+//     background: rgba(0, 0, 0, 0.8);
+//     top: 0;
+//     font-family: 'Helvetica', 'Arial', sans-serif;
+//     font-size: 150px;
+//     color: red;
+//     cursor: pointer;
+// }

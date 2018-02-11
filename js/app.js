@@ -34,8 +34,7 @@ $(function (){
 		// Checks if search field is empty, so it renders items from localstorage and stops ajax request.
 		if(!searchField){
 			localChars();
-			removeLocal();
-			$('#root .search-result').empty();
+    		location.reload();
 			return;
 		}
 
@@ -50,16 +49,24 @@ $(function (){
 			},
 			success: function (data) {
 				$('#root .loading').hide();
+				$('#root .characters-local').empty();
 		  		characters = data.data.results;
 
 		  		$('#root .search-result').empty();
 			    $.each(data.data.results, function(index){
-			    	$('#root .search-result').append('<li data-index="'+ index +'"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"><h5>' + data.data.results[index].name + '</h5><button class="mark">bookmark</button></li>');
+			    	// Check if item is already bookmarked
+			    	var alreadyMarked = '<span></span>';
+			    	for (var i = 0; i < localStorage.length; i++) {
+					    var key = localStorage.key(i);
+						var stringID = JSON.stringify(data.data.results[index].id);
+					    if (key.indexOf(stringID) >= 0) { 
+					        var alreadyMarked = '<span>Marked</span>';
+					    }
+					}
+
+			    	$('#root .search-result').append('<li data-index="'+ index +'"><img src="' + data.data.results[index].thumbnail.path + '/standard_xlarge.' + data.data.results[index].thumbnail.extension + '"><h5>' + data.data.results[index].name + '</h5><button class="mark">bookmark</button>'+ 	alreadyMarked +'</li>');
 		    	});
 
-			    // localStorage.setItem('characters', JSON.stringify(characters));
-
-				$('#root .characters-local').empty();
 
 			}
 		});
@@ -73,8 +80,6 @@ $(function (){
 	$(document).ajaxStop(function() {
 		$('#root .search-result li .mark').click(function(){
 			var charItem = $(this).closest('li');
-			charItem.toggleClass('marked');
-
 
 			var charIndex = charItem.attr('data-index');
 			bookmarkedChar = JSON.stringify(characters[charIndex]);
@@ -85,10 +90,11 @@ $(function (){
 
 			var retrievedObject = localStorage.getItem('character' + characters[charIndex].id);
 			parsedObject = JSON.parse(retrievedObject);
+
+			charItem.find('span').text('MARK!!');
 			
 		});
 
-		// console.log(localCharacters);
 	});
 
 });
