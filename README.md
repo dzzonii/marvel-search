@@ -1,1 +1,1 @@
-# marvel-search
+Marvel API - Characters search
